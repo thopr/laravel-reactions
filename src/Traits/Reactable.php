@@ -24,11 +24,15 @@ trait Reactable
      *
      * @return \Illuminate\Support\Collection
      */
-    public function reactionsBy()
+    public function reactionsBy($reactionType)
     {
         $userModel = $this->resolveUserModel();
 
-        $userIds = $this->reactions->pluck('user_id');
+      // dd($reactionType);
+
+        $userIds = $this->reactions
+            ->where('type', $reactionType)
+        ->pluck('user_id');
 
         return $userModel::whereKey($userIds)->get();
     }

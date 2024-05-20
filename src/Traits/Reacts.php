@@ -20,10 +20,14 @@ trait Reacts
     {
         $reaction = $reactable->reactions()->where([
             'user_id' => $this->getKey(),
+            'type' => $type,
         ])->first();
 
         if (! $reaction) {
             return $this->storeReaction($reactable, $type);
+        }elseif ($reaction->type == $type) {
+            $this->deleteReaction($reaction, $reactable);
+            return;
         }
 
         if ($reaction->type == $type) {
